@@ -6,24 +6,24 @@ import (
 	"regexp"
 )
 
-var uh = UrlHandler{}
+var uh = URLHandler{}
 
-// HandleCreateShortUrl Call method for generate new short url
-func HandleCreateShortUrl(response http.ResponseWriter, request *http.Request) {
+// Generate new short url
+func HandleCreateShortURL(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	fullUrl, err := io.ReadAll(request.Body)
-	isMatch, err := regexp.MatchString("((http|https)://)(www.)?[a-zA-Z0-9@:%._+~#?&/=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._+~#?&/=]*)", string(fullUrl))
+	fullURL, _ := io.ReadAll(request.Body)
+	isMatch, _ := regexp.MatchString("((http|https)://)(www.)?[a-zA-Z0-9@:%._+~#?&/=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._+~#?&/=]*)", string(fullURL))
 	if !isMatch {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	short, err := uh.CreateShortUrl(string(fullUrl))
+	short, _ := uh.CreateShortURL(string(fullURL))
 
-	_, err = response.Write([]byte(short))
+	_, err := response.Write([]byte(short))
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		return
@@ -31,15 +31,14 @@ func HandleCreateShortUrl(response http.ResponseWriter, request *http.Request) {
 	response.WriteHeader(http.StatusCreated)
 }
 
-// HandleGetFullUrl Call method for get actual full address for short email
-func HandleGetFullUrl(response http.ResponseWriter, request *http.Request) {
+func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	id := request.URL.Path[1:len(request.URL.Path)]
 
-	fu, err := uh.GetFullUrl(id)
+	fu, err := uh.GetFullURL(id)
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		return

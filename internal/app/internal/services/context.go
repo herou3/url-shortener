@@ -8,30 +8,30 @@ import (
 
 // Errors
 var (
-	errFullUrlIsEmpty = errors.New("property in body for fullEmail should no be empty")
-	errShortUrlEmpty  = errors.New("query property for shortEmail should no be empty")
-	errUrlIsNotFound  = errors.New("data hasn't information about this url")
+	errFullURLIsEmpty = errors.New("property in body for fullEmail should no be empty")
+	errShortURLEmpty  = errors.New("query property for shortEmail should no be empty")
+	errURLIsNotFound  = errors.New("data hasn't information about this url")
 )
 
-type UrlCreatorGetter interface {
-	CreateShortUrl(url string) (string, error)
-	GetFullUrl(shortUrl string) (string, error)
+type URLCreatorGetter interface {
+	CreateShortURL(url string) (string, error)
+	GetFullURL(shortUrl string) (string, error)
 }
 
-type UrlHandler struct {
+type URLHandler struct {
 	storage UrlsStorage
 }
 
-type UrlDetail struct {
-	fullUrl  string
-	shortUrl string
+type URLDetail struct {
+	fullURL  string
+	shortURL string
 }
 
-func (h *UrlHandler) CreateShortUrl(fullUrl string) (string, error) {
-	if len(fullUrl) == 0 {
-		return "", fmt.Errorf("fullUrl is empty", errFullUrlIsEmpty)
+func (h *URLHandler) CreateShortURL(fullURL string) (string, error) {
+	if len(fullURL) == 0 {
+		return "", fmt.Errorf("fullURL is empty %s", errFullURLIsEmpty)
 	}
-	shortUrl, err := h.storage.CreateShortUrl(fullUrl)
+	shortUrl, err := h.storage.CreateShortURL(fullURL)
 	if err != nil {
 		return "", fmt.Errorf("create url: %w", err)
 	}
@@ -39,56 +39,56 @@ func (h *UrlHandler) CreateShortUrl(fullUrl string) (string, error) {
 	return shortUrl, nil
 }
 
-func (h *UrlHandler) GetFullUrl(shortUrl string) (string, error) {
-	if len(shortUrl) == 0 {
-		return "", fmt.Errorf("fullUrl is empty", errShortUrlEmpty)
+func (h *URLHandler) GetFullURL(shortURL string) (string, error) {
+	if len(shortURL) == 0 {
+		return "", fmt.Errorf("fullURL is empty %s", errShortURLEmpty)
 	}
-	fullUrl, err := h.storage.GetFullUrl(shortUrl)
+	fullURL, err := h.storage.GetFullURL(shortURL)
 	if err != nil {
 		return "", fmt.Errorf("create url: %w", err)
 	}
-	if fullUrl == "" {
-		return "", errUrlIsNotFound
+	if fullURL == "" {
+		return "", errURLIsNotFound
 	}
 
-	return fullUrl, nil
+	return fullURL, nil
 }
 
 // Methods for db
 type UrlsStorage struct {
-	urls map[string]UrlDetail
+	urls map[string]URLDetail
 }
 
-func (us *UrlsStorage) CreateShortUrl(fullUrl string) (string, error) {
+func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	isNotFound := true
-	shortUrlId := ""
+	shortURLId := ""
 	for isNotFound {
-		shortUrlId = tools.String(8)
-		_, err := us.GetFullUrl(shortUrlId)
+		shortURLId = tools.String(8)
+		_, err := us.GetFullURL(shortURLId)
 
 		if err != nil {
 			isNotFound = false
 		}
 	}
 
-	urlDetail := UrlDetail{
-		fullUrl:  fullUrl,
-		shortUrl: shortUrlId,
+	urlDetail := URLDetail{
+		fullURL:  fullURL,
+		shortURL: shortURLId,
 	}
 
 	if us.urls == nil {
-		us.urls = make(map[string]UrlDetail)
+		us.urls = make(map[string]URLDetail)
 	}
-	us.urls[urlDetail.shortUrl] = urlDetail
+	us.urls[urlDetail.shortURL] = urlDetail
 
-	return shortUrlId, nil
+	return shortURLId, nil
 }
 
-func (us *UrlsStorage) GetFullUrl(shortUrl string) (string, error) {
-	urlDetail, ok := us.urls[shortUrl]
+func (us *UrlsStorage) GetFullURL(shortURL string) (string, error) {
+	urlDetail, ok := us.urls[shortURL]
 	if !ok {
-		return "", errUrlIsNotFound
+		return "", errURLIsNotFound
 	}
 
-	return urlDetail.fullUrl, nil
+	return urlDetail.fullURL, nil
 }

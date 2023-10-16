@@ -25,12 +25,12 @@ func Init() *Server {
 func pathHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		if request.URL.Path == "/" {
-			services.HandleCreateShortUrl(writer, request)
+			services.HandleCreateShortURL(writer, request)
 			return
 		}
 		status, _ := regexp.MatchString("([/][a-zA-Z0-9]{8}$)", request.URL.Path)
 		if status && len(request.URL.Path) == 9 {
-			services.HandleGetFullUrl(writer, request)
+			services.HandleGetFullURL(writer, request)
 			return
 		}
 
