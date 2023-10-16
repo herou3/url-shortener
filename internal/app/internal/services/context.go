@@ -15,7 +15,7 @@ var (
 
 type URLCreatorGetter interface {
 	CreateShortURL(url string) (string, error)
-	GetFullURL(shortUrl string) (string, error)
+	GetFullURL(shortURL string) (string, error)
 }
 
 type URLHandler struct {
@@ -31,12 +31,12 @@ func (h *URLHandler) CreateShortURL(fullURL string) (string, error) {
 	if len(fullURL) == 0 {
 		return "", fmt.Errorf("fullURL is empty %s", errFullURLIsEmpty)
 	}
-	shortUrl, err := h.storage.CreateShortURL(fullURL)
+	shortURL, err := h.storage.CreateShortURL(fullURL)
 	if err != nil {
 		return "", fmt.Errorf("create url: %w", err)
 	}
 
-	return shortUrl, nil
+	return shortURL, nil
 }
 
 func (h *URLHandler) GetFullURL(shortURL string) (string, error) {
