@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+const (
+	host = "localhost"
+	port = "8080"
+)
+
 // функция main вызывается автоматически при запуске приложения
 func main() {
 	if err := run(); err != nil {
@@ -18,5 +23,5 @@ func run() error {
 
 	s := internal.Init()
 
-	return http.ListenAndServe("127.0.0.1:8080", s.Mux)
+	return http.ListenAndServe(host+":"+port, s.Mux)
 }
