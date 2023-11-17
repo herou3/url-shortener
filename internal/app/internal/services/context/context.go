@@ -1,4 +1,4 @@
-package services
+package context
 
 import (
 	"errors"
@@ -19,19 +19,29 @@ type URLCreatorGetter interface {
 }
 
 type URLHandler struct {
-	storage UrlsStorage
+	Storage urlsStorage
+}
+
+var myHandler *URLHandler
+
+func GetUH() *URLHandler {
+	if myHandler == nil {
+		myHandler = &URLHandler{}
+	}
+
+	return myHandler
 }
 
 type URLDetail struct {
-	fullURL  string
-	shortURL string
+	FullURL  string
+	ShortURL string
 }
 
 func (h *URLHandler) CreateShortURL(fullURL string) (string, error) {
 	if len(fullURL) == 0 {
 		return "", fmt.Errorf("fullURL is empty %s", errFullURLIsEmpty)
 	}
-	shortURL, err := h.storage.CreateShortURL(fullURL)
+	shortURL, err := h.Storage.CreateShortURL(fullURL)
 	if err != nil {
 		return "", fmt.Errorf("create url: %w", err)
 	}
@@ -43,7 +53,7 @@ func (h *URLHandler) GetFullURL(shortURL string) (string, error) {
 	if len(shortURL) == 0 {
 		return "", fmt.Errorf("fullURL is empty %s", errShortURLEmpty)
 	}
-	fullURL, err := h.storage.GetFullURL(shortURL)
+	fullURL, err := h.Storage.GetFullURL(shortURL)
 	if err != nil {
 		return "", fmt.Errorf("create url: %w", err)
 	}
@@ -55,11 +65,11 @@ func (h *URLHandler) GetFullURL(shortURL string) (string, error) {
 }
 
 // Methods for db
-type UrlsStorage struct {
-	urls map[string]URLDetail
+type urlsStorage struct {
+	Urls map[string]URLDetail
 }
 
-func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
+func (us *urlsStorage) CreateShortURL(fullURL string) (string, error) {
 	isNotFound := true
 	shortURLId := ""
 	for isNotFound {
@@ -72,23 +82,23 @@ func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	}
 
 	urlDetail := URLDetail{
-		fullURL:  fullURL,
-		shortURL: shortURLId,
+		FullURL:  fullURL,
+		ShortURL: shortURLId,
 	}
 
-	if us.urls == nil {
-		us.urls = make(map[string]URLDetail)
+	if us.Urls == nil {
+		us.Urls = make(map[string]URLDetail)
 	}
-	us.urls[urlDetail.shortURL] = urlDetail
+	us.Urls[urlDetail.ShortURL] = urlDetail
 
 	return shortURLId, nil
 }
 
-func (us *UrlsStorage) GetFullURL(shortURL string) (string, error) {
-	urlDetail, ok := us.urls[shortURL]
+func (us *urlsStorage) GetFullURL(shortURL string) (string, error) {
+	urlDetail, ok := us.Urls[shortURL]
 	if !ok {
 		return "", errURLIsNotFound
 	}
 
-	return urlDetail.fullURL, nil
+	return urlDetail.FullURL, nil
 }

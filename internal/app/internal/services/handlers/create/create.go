@@ -1,14 +1,14 @@
-package services
+package handlers
 
 import (
+	"github.com/herou3/url-shortener/internal/app/internal/services/context"
 	"io"
 	"net/http"
 	"regexp"
 )
 
-var uh = URLHandler{}
+var uh = context.GetUH()
 
-// Generate new short url
 func HandleCreateShortURL(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		response.WriteHeader(http.StatusBadRequest)
@@ -29,21 +29,4 @@ func HandleCreateShortURL(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 	response.WriteHeader(http.StatusCreated)
-}
-
-func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
-	if request.Method != http.MethodGet {
-		response.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	id := request.URL.Path[1:len(request.URL.Path)]
-
-	fu, err := uh.GetFullURL(id)
-	if err != nil {
-		response.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	response.Header().Add("Location", fu)
-	response.WriteHeader(http.StatusTemporaryRedirect)
 }
