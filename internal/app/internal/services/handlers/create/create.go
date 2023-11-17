@@ -23,10 +23,11 @@ func HandleCreateShortURL(response http.ResponseWriter, request *http.Request) {
 	}
 	short, _ := uh.CreateShortURL(string(fullURL))
 
+	response.WriteHeader(http.StatusCreated)
 	_, err := response.Write([]byte(short))
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	response.WriteHeader(http.StatusCreated)
+	return
 }

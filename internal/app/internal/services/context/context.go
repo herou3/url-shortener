@@ -19,7 +19,7 @@ type URLCreatorGetter interface {
 }
 
 type URLHandler struct {
-	Storage urlsStorage
+	Storage UrlsStorage
 }
 
 var myHandler *URLHandler
@@ -65,13 +65,16 @@ func (h *URLHandler) GetFullURL(shortURL string) (string, error) {
 }
 
 // Methods for db
-type urlsStorage struct {
+type UrlsStorage struct {
 	Urls map[string]URLDetail
 }
 
-func (us *urlsStorage) CreateShortURL(fullURL string) (string, error) {
+func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	isNotFound := true
 	shortURLId := ""
+	if fullURL == "" {
+		return "", fmt.Errorf("fullURL is empty %s", errFullURLIsEmpty)
+	}
 	for isNotFound {
 		shortURLId = tools.String(8)
 		_, err := us.GetFullURL(shortURLId)
@@ -94,7 +97,7 @@ func (us *urlsStorage) CreateShortURL(fullURL string) (string, error) {
 	return shortURLId, nil
 }
 
-func (us *urlsStorage) GetFullURL(shortURL string) (string, error) {
+func (us *UrlsStorage) GetFullURL(shortURL string) (string, error) {
 	urlDetail, ok := us.Urls[shortURL]
 	if !ok {
 		return "", errURLIsNotFound

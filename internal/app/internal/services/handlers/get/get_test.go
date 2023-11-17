@@ -3,16 +3,21 @@ package get
 import (
 	"github.com/herou3/url-shortener/internal/app/internal/services/context"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestHandleGetFullURL(t *testing.T) {
+	type header struct {
+		headerName  string
+		headerValue string
+	}
 	type want struct {
 		code   int
-		site   string
-		header string
+		header header
 	}
 	tests := []struct {
 		name         string
@@ -27,11 +32,14 @@ func TestHandleGetFullURL(t *testing.T) {
 			},
 		},
 		{
-			name:         "Check to the book wasn located in context",
+			name:         "Check to the book was located in context",
 			beforeAction: true,
 			want: want{
-				site: "https://yandex.ru/",
 				code: 307,
+				header: header{
+					headerName:  "Location",
+					headerValue: "https://ya.ru/",
+				},
 			},
 		},
 	}
@@ -41,7 +49,7 @@ func TestHandleGetFullURL(t *testing.T) {
 			if test.beforeAction {
 				context.GetUH().Storage.Urls = make(map[string]context.URLDetail)
 				context.GetUH().Storage.Urls[defaultClientId] = context.URLDetail{
-					FullURL:  test.want.site,
+					FullURL:  test.want.header.headerValue,
 					ShortURL: defaultClientId,
 				}
 			}
@@ -51,6 +59,10 @@ func TestHandleGetFullURL(t *testing.T) {
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
 			if test.beforeAction {
+				_, err := io.ReadAll(res.Body)
+				require.NoError(t, err)
+				assert.Equal(t, test.want.header.headerValue, res.Header.Get(test.want.header.headerName))
+
 				context.GetUH().Storage.Urls = make(map[string]context.URLDetail)
 			}
 		})
