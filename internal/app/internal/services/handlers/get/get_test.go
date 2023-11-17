@@ -45,15 +45,15 @@ func TestHandleGetFullURL(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			defaultClientId := "msymbol"
+			defaultClientID := "msymbol"
 			if test.beforeAction {
 				context.GetUH().Storage.Urls = make(map[string]context.URLDetail)
-				context.GetUH().Storage.Urls[defaultClientId] = context.URLDetail{
+				context.GetUH().Storage.Urls[defaultClientID] = context.URLDetail{
 					FullURL:  test.want.header.headerValue,
-					ShortURL: defaultClientId,
+					ShortURL: defaultClientID,
 				}
 			}
-			request := httptest.NewRequest(http.MethodGet, "/"+defaultClientId, nil)
+			request := httptest.NewRequest(http.MethodGet, "/"+defaultClientID, nil)
 			w := httptest.NewRecorder()
 			HandleGetFullURL(w, request)
 			res := w.Result()
@@ -64,6 +64,10 @@ func TestHandleGetFullURL(t *testing.T) {
 				assert.Equal(t, test.want.header.headerValue, res.Header.Get(test.want.header.headerName))
 
 				context.GetUH().Storage.Urls = make(map[string]context.URLDetail)
+			}
+			err := res.Body.Close()
+			if err != nil {
+				return
 			}
 		})
 	}

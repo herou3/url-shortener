@@ -29,5 +29,4 @@ func HandleCreateShortURL(response http.ResponseWriter, request *http.Request) {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	return
 }

@@ -63,6 +63,10 @@ func TestHandleCreateShortURL(t *testing.T) {
 			HandleCreateShortURL(w, request)
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
+			err := res.Body.Close()
+			if err != nil {
+				return
+			}
 		})
 	}
 }

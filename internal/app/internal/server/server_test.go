@@ -13,7 +13,7 @@ func TestInit(t *testing.T) {
 	}{
 		{
 			name: "Check to init Server",
-			want: "fsd",
+			want: "Server",
 		},
 	}
 	for _, test := range tests {

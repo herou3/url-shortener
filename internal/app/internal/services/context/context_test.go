@@ -30,8 +30,8 @@ func TestGetUH(t *testing.T) {
 
 func TestUrlsStorage_GetFullURL(t *testing.T) {
 	type want struct {
-		fullUrl  string
-		shortUrl string
+		fullURL  string
+		shortURL string
 	}
 	tests := []struct {
 		name         string
@@ -39,18 +39,18 @@ func TestUrlsStorage_GetFullURL(t *testing.T) {
 		want         want
 	}{
 		{
-			name:         "Check to return fullUrl by shortUrl",
+			name:         "Check to return FullURL by shortURL",
 			beforeAction: true,
 			want: want{
-				fullUrl:  "https://ya.ru/",
-				shortUrl: "aaaaaaa",
+				fullURL:  "https://ya.ru/",
+				shortURL: "aaaaaaa",
 			},
 		},
 		{
 			name: "Check to return error with description when urls hadn't been in context",
 			want: want{
-				fullUrl:  "",
-				shortUrl: "bbbbbbb",
+				fullURL:  "",
+				shortURL: "bbbbbbb",
 			},
 		},
 	}
@@ -58,21 +58,21 @@ func TestUrlsStorage_GetFullURL(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			if test.beforeAction {
 				GetUH().Storage.Urls = make(map[string]URLDetail)
-				GetUH().Storage.Urls[test.want.shortUrl] = URLDetail{
-					FullURL:  test.want.fullUrl,
-					ShortURL: test.want.shortUrl,
+				GetUH().Storage.Urls[test.want.shortURL] = URLDetail{
+					FullURL:  test.want.fullURL,
+					ShortURL: test.want.shortURL,
 				}
 			}
-			result, _ := GetUH().Storage.GetFullURL(test.want.shortUrl)
-			assert.Equal(t, result, test.want.fullUrl)
+			result, _ := GetUH().Storage.GetFullURL(test.want.shortURL)
+			assert.Equal(t, result, test.want.fullURL)
 		})
 	}
 }
 
 func TestUrlsStorage_CreateShortURL(t *testing.T) {
 	type want struct {
-		fullUrl      string
-		sizeShortUrl int
+		fullURL      string
+		sizeShortURL int
 	}
 	tests := []struct {
 		name         string
@@ -80,33 +80,33 @@ func TestUrlsStorage_CreateShortURL(t *testing.T) {
 		want         want
 	}{
 		{
-			name:         "Check to return fullUrl by shortUrl",
+			name:         "Check to return fullURL by shortURL",
 			beforeAction: true,
 			want: want{
-				fullUrl:      "https://ya.ru/",
-				sizeShortUrl: 8,
+				fullURL:      "https://ya.ru/",
+				sizeShortURL: 8,
 			},
 		},
 		{
 			name: "Check to return error with description when urls hadn't been in context",
 			want: want{
-				fullUrl:      "",
-				sizeShortUrl: 0,
+				fullURL:      "",
+				sizeShortURL: 0,
 			},
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, _ := GetUH().Storage.CreateShortURL(test.want.fullUrl)
-			assert.Equal(t, len(result), test.want.sizeShortUrl)
+			result, _ := GetUH().Storage.CreateShortURL(test.want.fullURL)
+			assert.Equal(t, len(result), test.want.sizeShortURL)
 		})
 	}
 }
 
 func TestURLHandler_GetFullURL(t *testing.T) {
 	type want struct {
-		fullUrl  string
-		shortUrl string
+		fullURL  string
+		shortURL string
 	}
 	tests := []struct {
 		name         string
@@ -114,18 +114,18 @@ func TestURLHandler_GetFullURL(t *testing.T) {
 		want         want
 	}{
 		{
-			name:         "Check to return fullUrl by shortUrl",
+			name:         "Check to return fullURL by shortURL",
 			beforeAction: true,
 			want: want{
-				fullUrl:  "https://ya.ru/",
-				shortUrl: "aaaaaaa",
+				fullURL:  "https://ya.ru/",
+				shortURL: "aaaaaaa",
 			},
 		},
 		{
 			name: "Check to return error with description when urls hadn't been in context",
 			want: want{
-				fullUrl:  "",
-				shortUrl: "bbbbbbb",
+				fullURL:  "",
+				shortURL: "bbbbbbb",
 			},
 		},
 	}
@@ -133,21 +133,21 @@ func TestURLHandler_GetFullURL(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			if test.beforeAction {
 				GetUH().Storage.Urls = make(map[string]URLDetail)
-				GetUH().Storage.Urls[test.want.shortUrl] = URLDetail{
-					FullURL:  test.want.fullUrl,
-					ShortURL: test.want.shortUrl,
+				GetUH().Storage.Urls[test.want.shortURL] = URLDetail{
+					FullURL:  test.want.fullURL,
+					ShortURL: test.want.shortURL,
 				}
 			}
-			result, _ := GetUH().GetFullURL(test.want.shortUrl)
-			assert.Equal(t, result, test.want.fullUrl)
+			result, _ := GetUH().GetFullURL(test.want.shortURL)
+			assert.Equal(t, result, test.want.fullURL)
 		})
 	}
 }
 
 func TestURLHandler_CreateShortURL(t *testing.T) {
 	type want struct {
-		fullUrl      string
-		sizeShortUrl int
+		fullURL      string
+		sizeShortURL int
 	}
 	tests := []struct {
 		name         string
@@ -155,25 +155,25 @@ func TestURLHandler_CreateShortURL(t *testing.T) {
 		want         want
 	}{
 		{
-			name:         "Check to return fullUrl by shortUrl",
+			name:         "Check to return fullURL by shortURL",
 			beforeAction: true,
 			want: want{
-				fullUrl:      "https://ya.ru/",
-				sizeShortUrl: 8,
+				fullURL:      "https://ya.ru/",
+				sizeShortURL: 8,
 			},
 		},
 		{
 			name: "Check to return error with description when urls hadn't been in context",
 			want: want{
-				fullUrl:      "",
-				sizeShortUrl: 11,
+				fullURL:      "",
+				sizeShortURL: 0,
 			},
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, _ := GetUH().CreateShortURL(test.want.fullUrl)
-			assert.Equal(t, len(result), test.want.sizeShortUrl)
+			result, _ := GetUH().CreateShortURL(test.want.fullURL)
+			assert.Equal(t, len(result), test.want.sizeShortURL)
 		})
 	}
 }
