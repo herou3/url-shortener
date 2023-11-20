@@ -1,40 +1,25 @@
 package server
 
 import (
+	"github.com/go-chi/chi/v5"
+	_ "github.com/go-chi/chi/v5"
 	create "github.com/herou3/url-shortener/internal/app/internal/services/handlers/create"
 	"github.com/herou3/url-shortener/internal/app/internal/services/handlers/get"
-	"net/http"
-	"regexp"
 )
 
 // Server is a server with all the batteries included
 type Server struct {
-	Mux *http.ServeMux
+	Mux *chi.Mux
 }
 
 // Init returns new server instance
 func Init() *Server {
 	server := &Server{
-		Mux: http.NewServeMux(),
+		Mux: chi.NewRouter(),
 	}
 
-	server.Mux.HandleFunc(`/`, pathHandler())
+	server.Mux.Post("/", create.HandleCreateShortURL)
+	server.Mux.Get("/{id}", get.HandleGetFullURL)
 
 	return server
-}
-
-func pathHandler() http.HandlerFunc {
-	return func(writer http.ResponseWriter, request *http.Request) {
-		if request.URL.Path == "/" {
-			create.HandleCreateShortURL(writer, request)
-			return
-		}
-		status, _ := regexp.MatchString("([/][a-zA-Z0-9]{8}$)", request.URL.Path)
-		if status && len(request.URL.Path) == 9 {
-			get.HandleGetFullURL(writer, request)
-			return
-		}
-
-		writer.WriteHeader(http.StatusMethodNotAllowed)
-	}
 }
