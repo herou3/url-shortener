@@ -20,11 +20,11 @@ func GetConf() *Configuration {
 
 func (config *Configuration) SetConf(params map[string]string) {
 	host, errHost := params["host"]
-	if errHost != false {
+	if errHost {
 		config.HOST = host
 	}
-	shortURL, errUrl := params["shortURL"]
-	if errUrl != false {
+	shortURL, errURL := params["shortURL"]
+	if errURL {
 		config.ShortURL = shortURL
 	}
 }

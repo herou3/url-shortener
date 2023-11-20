@@ -179,8 +179,8 @@ func TestURLHandler_CreateShortURL(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result, _ := GetUH().CreateShortURL(test.want.fullURL)
-			isHasHttp, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
-			if isHasHttp {
+			isHasHTTP, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
+			if isHasHTTP {
 				assert.Equal(t, len(result), test.want.sizeShortURL)
 			}
 		})

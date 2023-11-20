@@ -96,9 +96,9 @@ func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	}
 	us.Urls[urlDetail.ShortURL] = urlDetail
 
-	isHasHttp, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
+	isHasHTTP, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
 
-	if isHasHttp {
+	if isHasHTTP {
 		return config.GetConf().ShortURL + "/" + shortURLId, nil
 	} else {
 		return "https" + config.GetConf().ShortURL + "/" + shortURLId, nil
