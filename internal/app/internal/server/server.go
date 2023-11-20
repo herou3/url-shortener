@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/go-chi/chi/v5"
-	_ "github.com/go-chi/chi/v5"
 	create "github.com/herou3/url-shortener/internal/app/internal/services/handlers/create"
 	"github.com/herou3/url-shortener/internal/app/internal/services/handlers/get"
 )
