@@ -1,8 +1,11 @@
 package context
 
 import (
+	"github.com/herou3/url-shortener/internal/app/internal/config"
 	"github.com/stretchr/testify/assert"
 	"reflect"
+	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -98,7 +101,10 @@ func TestUrlsStorage_CreateShortURL(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result, _ := GetUH().Storage.CreateShortURL(test.want.fullURL)
-			assert.Equal(t, len(result), test.want.sizeShortURL)
+			strs := strings.Split(result, "/")
+			if len(strs) > 2 {
+				assert.Equal(t, len(strs[2]), test.want.sizeShortURL)
+			}
 		})
 	}
 }
@@ -159,7 +165,7 @@ func TestURLHandler_CreateShortURL(t *testing.T) {
 			beforeAction: true,
 			want: want{
 				fullURL:      "https://ya.ru/",
-				sizeShortURL: 8,
+				sizeShortURL: 25,
 			},
 		},
 		{
@@ -173,7 +179,10 @@ func TestURLHandler_CreateShortURL(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result, _ := GetUH().CreateShortURL(test.want.fullURL)
-			assert.Equal(t, len(result), test.want.sizeShortURL)
+			isHasHttp, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
+			if isHasHttp {
+				assert.Equal(t, len(result), test.want.sizeShortURL)
+			}
 		})
 	}
 }

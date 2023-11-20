@@ -3,7 +3,9 @@ package context
 import (
 	"errors"
 	"fmt"
+	"github.com/herou3/url-shortener/internal/app/internal/config"
 	"github.com/herou3/url-shortener/internal/app/internal/services/tools"
+	"regexp"
 )
 
 // Errors
@@ -94,7 +96,13 @@ func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	}
 	us.Urls[urlDetail.ShortURL] = urlDetail
 
-	return shortURLId, nil
+	isHasHttp, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
+
+	if isHasHttp {
+		return config.GetConf().ShortURL + "/" + shortURLId, nil
+	} else {
+		return "https" + config.GetConf().ShortURL + "/" + shortURLId, nil
+	}
 }
 
 func (us *UrlsStorage) GetFullURL(shortURL string) (string, error) {
