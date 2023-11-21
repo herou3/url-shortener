@@ -6,6 +6,7 @@ import (
 	"github.com/herou3/url-shortener/internal/app/internal/config"
 	internal "github.com/herou3/url-shortener/internal/app/internal/server"
 	"net/http"
+	"os"
 )
 
 type configForLaunch struct {
@@ -16,6 +17,14 @@ type configForLaunch struct {
 // функция main вызывается автоматически при запуске приложения
 func main() {
 	conf := readConsoleData()
+
+	if envServer := os.Getenv("SERVER_ADDRESS"); envServer != "" {
+		conf.serverURL = envServer
+	}
+	if envBaseURL := os.Getenv("BASE_URL"); envBaseURL != "" {
+		conf.baseURL = envBaseURL
+	}
+
 	if err := run(conf.serverURL, conf.baseURL); err != nil {
 		panic(err)
 	}
