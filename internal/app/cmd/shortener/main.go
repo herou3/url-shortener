@@ -8,17 +8,28 @@ import (
 	"net/http"
 )
 
+type configForLaunch struct {
+	serverURL string
+	baseURL   string
+}
+
 // функция main вызывается автоматически при запуске приложения
 func main() {
+	conf := readConsoleData()
+	if err := run(conf.serverURL, conf.baseURL); err != nil {
+		panic(err)
+	}
+}
+
+func readConsoleData() configForLaunch {
 	htf := flag.String("a", "localhost:8080", "default host")
 	su := flag.String("b", "https://shorturl.ru", "default host")
 
 	flag.Parse()
-
-	if err := run(*htf, *su); err != nil {
-		panic(err)
+	return configForLaunch{
+		serverURL: *htf,
+		baseURL:   *su,
 	}
-
 }
 
 // функция run будет полезна при инициализации зависимостей сервера перед запуском
