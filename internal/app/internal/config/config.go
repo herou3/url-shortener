@@ -10,8 +10,8 @@ var config *Configuration
 func GetConf() *Configuration {
 	if config == nil {
 		config = &Configuration{
-			HOST:     "localhost:8080/",
-			ShortURL: "local:8989/",
+			HOST:     "localhost:8080",
+			ShortURL: "local:8989",
 		}
 	}
 
