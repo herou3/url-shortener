@@ -20,7 +20,6 @@ func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	response.Header().Add("Location", fu)
 	response.WriteHeader(http.StatusTemporaryRedirect)
+	response.Header().Add("Location", fu)
 }
