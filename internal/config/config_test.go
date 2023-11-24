@@ -20,7 +20,7 @@ func TestURLHandler_CreateShortURL(t *testing.T) {
 			isEmptyRequest: true,
 			want: want{
 				host: "localhost:8080",
-				url:  "local:8989",
+				url:  "localhost:8080",
 			},
 		},
 		{

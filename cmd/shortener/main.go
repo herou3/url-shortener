@@ -3,7 +3,7 @@ package main
 
 import (
 	"flag"
-	config "github.com/herou3/url-shortener/internal/config"
+	"github.com/herou3/url-shortener/internal/config"
 	internal "github.com/herou3/url-shortener/internal/server"
 	"net/http"
 	"os"
@@ -32,7 +32,7 @@ func main() {
 
 func readConsoleData() configForLaunch {
 	htf := flag.String("a", "localhost:8080", "default host")
-	su := flag.String("b", "https://shorturl.ru", "default host")
+	su := flag.String("b", "localhost:8080", "default host")
 
 	flag.Parse()
 	return configForLaunch{

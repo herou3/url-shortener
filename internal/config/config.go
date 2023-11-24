@@ -1,5 +1,9 @@
 package config
 
+import (
+	"regexp"
+)
+
 type Configuration struct {
 	HOST     string
 	ShortURL string
@@ -11,7 +15,7 @@ func GetConf() *Configuration {
 	if config == nil {
 		config = &Configuration{
 			HOST:     "localhost:8080",
-			ShortURL: "local:8989",
+			ShortURL: "localhost:8080",
 		}
 	}
 
@@ -25,6 +29,10 @@ func (config *Configuration) SetConf(params map[string]string) {
 	}
 	shortURL, errURL := params["shortURL"]
 	if errURL {
+		isMatch, _ := regexp.MatchString("((http|https)://)", shortURL)
+		if !isMatch {
+			shortURL = "http://" + shortURL
+		}
 		config.ShortURL = shortURL
 	}
 }
