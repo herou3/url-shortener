@@ -15,11 +15,11 @@ func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
 	}
 	id := request.URL.Path[1:len(request.URL.Path)]
 
+	response.WriteHeader(http.StatusTemporaryRedirect)
 	fu, err := uh.GetFullURL(id)
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	response.WriteHeader(http.StatusTemporaryRedirect)
 	response.Header().Add("Location", fu)
 }
