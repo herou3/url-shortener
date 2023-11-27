@@ -208,11 +208,6 @@ jobs:
               -binary-path=cmd/shortener/shortener \
               -server-port=$SERVER_PORT
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
       - name: "Code increment #6"
         if: |
           github.ref == 'refs/heads/main' ||
@@ -483,3 +478,13 @@ jobs:
         run: |
           shortenertestbeta -test.v -test.run=^TestIteration18$ \
               -source-path=. \
+
+      - name: "Star unit tests"
+        run: |
+          cd ..
+          go test ./... -race -covermode=atomic -coverprofile=coverage.out
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
