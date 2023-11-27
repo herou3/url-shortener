@@ -489,3 +489,6 @@ jobs:
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Check code formatting using gofmt
+        uses: Jerome1337/gofmt-action@v1.0.5
