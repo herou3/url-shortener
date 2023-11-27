@@ -17,8 +17,9 @@ func TestHandleGetFullURL(t *testing.T) {
 		headerValue string
 	}
 	type want struct {
-		code   int
-		header header
+		code        int
+		header      header
+		otherMethod bool
 	}
 	tests := []struct {
 		name         string
@@ -43,6 +44,18 @@ func TestHandleGetFullURL(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:         "Check to the book was located in context",
+			beforeAction: true,
+			want: want{
+				code: 400,
+				header: header{
+					headerName:  "Location",
+					headerValue: "https://ya.ru/",
+				},
+				otherMethod: true,
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -55,11 +68,14 @@ func TestHandleGetFullURL(t *testing.T) {
 				}
 			}
 			request := httptest.NewRequest(http.MethodGet, "/"+defaultClientID, nil)
+			if test.want.otherMethod {
+				request = httptest.NewRequest(http.MethodPost, "/"+defaultClientID, nil)
+			}
 			w := httptest.NewRecorder()
 			HandleGetFullURL(w, request)
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
-			if test.beforeAction {
+			if test.beforeAction && !test.want.otherMethod {
 				_, err := io.ReadAll(res.Body)
 				require.NoError(t, err)
 				assert.Equal(t, test.want.header.headerValue, res.Header.Get(test.want.header.headerName))

@@ -11,7 +11,8 @@ import (
 
 func TestHandleCreateShortURL(t *testing.T) {
 	type want struct {
-		code int
+		code        int
+		otherMethod bool
 	}
 	tests := []struct {
 		name         string
@@ -51,10 +52,22 @@ func TestHandleCreateShortURL(t *testing.T) {
 				code: 400,
 			},
 		},
+		{
+			name:         "Check to create error in process creation client, request with empty body",
+			beforeAction: true,
+			body:         "",
+			want: want{
+				code:        400,
+				otherMethod: true,
+			},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			request := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer([]byte(test.body)))
+			if test.want.otherMethod {
+				request = httptest.NewRequest(http.MethodGet, "/", bytes.NewBuffer([]byte(test.body)))
+			}
 			w := httptest.NewRecorder()
 			HandleCreateShortURL(w, request)
 			res := w.Result()
