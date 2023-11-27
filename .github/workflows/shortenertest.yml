@@ -481,6 +481,7 @@ jobs:
 
       - name: "Star unit tests"
         run: |
+          pwd
           cd ..
           go test ./... -race -covermode=atomic -coverprofile=coverage.out
 
