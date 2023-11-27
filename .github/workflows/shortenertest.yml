@@ -483,9 +483,6 @@ jobs:
         run: |
           pwd
           ls
-          cd ..
-          pwd
-          ls
           go test ./... -race -covermode=atomic -coverprofile=coverage.out
 
       - name: Upload coverage reports to Codecov
