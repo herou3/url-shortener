@@ -1,13 +1,14 @@
 package get
 
 import (
-	"github.com/herou3/url-shortener/internal/services/context"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/herou3/url-shortener/internal/services/context"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestHandleGetFullURL(t *testing.T) {

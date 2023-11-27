@@ -3,9 +3,10 @@ package context
 import (
 	"errors"
 	"fmt"
+	"regexp"
+
 	"github.com/herou3/url-shortener/internal/config"
 	"github.com/herou3/url-shortener/internal/services/tools"
-	"regexp"
 )
 
 // Errors
@@ -73,13 +74,13 @@ type UrlsStorage struct {
 
 func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	isNotFound := true
-	shortURLId := ""
+	idForShortURL := ""
 	if fullURL == "" {
 		return "", fmt.Errorf("fullURL is empty %s", errFullURLIsEmpty)
 	}
 	for isNotFound {
-		shortURLId = tools.String(8)
-		_, err := us.GetFullURL(shortURLId)
+		idForShortURL = tools.String(8)
+		_, err := us.GetFullURL(idForShortURL)
 
 		if err != nil {
 			isNotFound = false
@@ -88,7 +89,7 @@ func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 
 	urlDetail := URLDetail{
 		FullURL:  fullURL,
-		ShortURL: shortURLId,
+		ShortURL: idForShortURL,
 	}
 
 	if us.Urls == nil {
@@ -99,9 +100,9 @@ func (us *UrlsStorage) CreateShortURL(fullURL string) (string, error) {
 	isHasHTTP, _ := regexp.MatchString("((http|https)://)", config.GetConf().ShortURL)
 
 	if isHasHTTP {
-		return config.GetConf().ShortURL + "/" + shortURLId, nil
+		return config.GetConf().ShortURL + "/" + idForShortURL, nil
 	} else {
-		return "https" + config.GetConf().ShortURL + "/" + shortURLId, nil
+		return "https" + config.GetConf().ShortURL + "/" + idForShortURL, nil
 	}
 }
 

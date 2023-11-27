@@ -2,20 +2,16 @@ package handlers
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHandleCreateShortURL(t *testing.T) {
-	type header struct {
-		headerName  string
-		headerValue string
-	}
 	type want struct {
-		code   int
-		header header
+		code int
 	}
 	tests := []struct {
 		name         string

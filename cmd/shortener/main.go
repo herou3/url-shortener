@@ -3,10 +3,11 @@ package main
 
 import (
 	"flag"
-	"github.com/herou3/url-shortener/internal/config"
-	internal "github.com/herou3/url-shortener/internal/server"
 	"net/http"
 	"os"
+
+	"github.com/herou3/url-shortener/internal/config"
+	internal "github.com/herou3/url-shortener/internal/server"
 )
 
 type configForLaunch struct {

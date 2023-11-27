@@ -1,11 +1,10 @@
 package get
 
 import (
-	"github.com/herou3/url-shortener/internal/services/context"
 	"net/http"
-)
 
-var uh = context.GetUH()
+	"github.com/herou3/url-shortener/internal/services/context"
+)
 
 // Get full url handler
 func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
@@ -15,7 +14,7 @@ func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
 	}
 	id := request.URL.Path[1:len(request.URL.Path)]
 
-	fu, err := uh.GetFullURL(id)
+	fu, err := context.GetUH().GetFullURL(id)
 	if err != nil {
 		response.WriteHeader(http.StatusBadRequest)
 		return

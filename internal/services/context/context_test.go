@@ -1,12 +1,13 @@
 package context
 
 import (
-	"github.com/herou3/url-shortener/internal/config"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"regexp"
 	"strings"
 	"testing"
+
+	"github.com/herou3/url-shortener/internal/config"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetUH(t *testing.T) {
