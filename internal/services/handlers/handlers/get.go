@@ -1,4 +1,4 @@
-package get
+package handlers
 
 import (
 	"net/http"
@@ -6,8 +6,8 @@ import (
 	"github.com/herou3/url-shortener/internal/services/context"
 )
 
-// Get full url handler
-func HandleGetFullURL(response http.ResponseWriter, request *http.Request) {
+// GetFullURLHandler Get full url handler
+func GetFullURLHandler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodGet {
 		response.WriteHeader(http.StatusBadRequest)
 		return

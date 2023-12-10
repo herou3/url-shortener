@@ -69,7 +69,7 @@ func TestHandleCreateShortURL(t *testing.T) {
 				request = httptest.NewRequest(http.MethodGet, "/", bytes.NewBuffer([]byte(test.body)))
 			}
 			w := httptest.NewRecorder()
-			HandleCreateShortURL(w, request)
+			CreateShortURLHandler(w, request)
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
 			err := res.Body.Close()

@@ -44,7 +44,7 @@ func readConsoleData() configForLaunch {
 
 // функция run будет полезна при инициализации зависимостей сервера перед запуском
 func run(host string, url string) error {
-	s := internal.Init()
+	s := internal.CreateServerInstance()
 	config.GetConf().SetConf(map[string]string{"host": host, "shortURL": url})
 	configForServer := config.GetConf()
 	return http.ListenAndServe(configForServer.HOST, s.Mux)
