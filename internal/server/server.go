@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/go-chi/chi/v5"
-	create "github.com/herou3/url-shortener/internal/services/handlers/create"
-	"github.com/herou3/url-shortener/internal/services/handlers/handlers"
+	"github.com/herou3/url-shortener/internal/services/handlers/create"
+	"github.com/herou3/url-shortener/internal/services/handlers/get"
 )
 
 // Server is a server with all the batteries included
@@ -17,8 +17,8 @@ func CreateServerInstance() *Server {
 		Mux: chi.NewRouter(),
 	}
 
-	server.Mux.Post("/", create.CreateShortURLHandler)
-	server.Mux.Get("/{id}", handlers.GetFullURLHandler)
+	server.Mux.Post("/", handlers.CreateShortURLHandler)
+	server.Mux.Get("/{id}", get.CallFullURLHandler)
 
 	return server
 }

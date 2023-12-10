@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Default characters set for generation short url
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
