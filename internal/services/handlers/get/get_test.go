@@ -1,4 +1,4 @@
-package handlers
+package get
 
 import (
 	"io"
@@ -72,7 +72,7 @@ func TestHandleGetFullURL(t *testing.T) {
 				request = httptest.NewRequest(http.MethodPost, "/"+defaultClientID, nil)
 			}
 			w := httptest.NewRecorder()
-			GetFullURLHandler(w, request)
+			CallFullURLHandler(w, request)
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
 			if test.beforeAction && !test.want.otherMethod {

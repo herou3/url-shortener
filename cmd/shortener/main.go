@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/herou3/url-shortener/internal/config"
+	"github.com/herou3/url-shortener/internal/logger"
 	internal "github.com/herou3/url-shortener/internal/server"
 )
 
@@ -47,5 +48,9 @@ func run(host string, url string) error {
 	s := internal.CreateServerInstance()
 	config.GetConf().SetConf(map[string]string{"host": host, "shortURL": url})
 	configForServer := config.GetConf()
-	return http.ListenAndServe(configForServer.HOST, s.Mux)
+	err := logger.InitializeLogger("info")
+	if err != nil {
+		return err
+	}
+	return http.ListenAndServe(configForServer.HOST, logger.WithLogging(s.Mux))
 }
