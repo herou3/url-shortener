@@ -31,3 +31,6 @@ jobs:
       - name: Run statictest
         run: |
           go vet -vettool=$(which statictest) ./...
+
+      - name: Check code formatting using gofmt
+        uses: Jerome1337/gofmt-action@v1.0.5
